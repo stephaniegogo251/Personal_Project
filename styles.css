@@ -477,7 +477,7 @@
     .menu-bar {
         position: relative;
         top: -15px;
-        gap: 10px;
+        gap: 0px;
         padding: 12px 24px;
         height: 64px;
         margin-top: auto;
