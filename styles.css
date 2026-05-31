@@ -30,7 +30,6 @@
     align-items: center;
     justify-content: center;
     padding-top: 150px;
-    
 }
 
 .main-text, .main-text-2 {
@@ -448,4 +447,26 @@
     line-height: 1.2;
     -webkit-text-stroke: 0.5px #222;
     word-break: break-word;
+}
+
+@media (max-width: 768px) {
+    .greeting .n2 {
+        font-size: 40px;
+        padding: 0px 10px;
+        text-align: center;
+    }
+
+    .bible-verse .n2 {
+        font-size: 15px;
+        text-align: center;
+    }
+    
+    .menu-bar {
+        width: 300px;
+    }
+
+    .menu-bar img {
+        width: 10px;
+        height: 15px;
+    }
 }
