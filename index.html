@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Mi Regalo</title>
     <link rel="icon" type="image/png" sizes="16x16" href="./img/icon.png">
     <link rel="stylesheet" href="./styles.css">
@@ -60,11 +60,11 @@
             <p class="message"></p>
         </div>
         <div class="menu-bar">
-            <img src="./img/n2.png" id="folder-btn">
-            <img src="./img/music.png" id="music-btn">
-            <img src="./img/cake.png" id="cake-btn">
+            <img src="./img/n2.png" id="folder-btn" height="60" width="75">
+            <img src="./img/music.png" id="music-btn" height="60" width="65">
+            <img src="./img/cake.png" id="cake-btn" height="60" width="60">
             <div class="cal-btn-wrap" id="cal-btn">
-                <img src="./img/nc2.png">
+                <img src="./img/nc2.png" height="60" width="60">
                 <div class="cal-date">
                     <span id="cal-month"  style="color: #FF5B78;"></span>
                     <span id="cal-day"  style="color: #FF5B78;"></span>
@@ -73,6 +73,50 @@
         </div>
     </div>
     <script type="text/javascript">
+
+    function makeDraggable(el) {
+        let active = false, startX, startY, origLeft, origTop;
+
+        function getPos(e) {
+            return e.touches ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+                                : { x: e.clientX,            y: e.clientY };
+        }
+
+        function onStart(e) {
+            if (e.target.closest('button, a, .recipe-list, .music-right, .song-list')) return;
+            active = true;
+            const pos = getPos(e);
+            const rect = el.getBoundingClientRect();
+            startX   = pos.x;
+            startY   = pos.y;
+            origLeft = rect.left;
+            origTop  = rect.top;
+            el.style.transform = 'none';
+            el.style.cursor    = 'grabbing';
+            e.preventDefault();
+        }
+
+        function onMove(e) {
+            if (!active) return;
+            const pos = getPos(e);
+            el.style.left = (origLeft + pos.x - startX) + 'px';
+            el.style.top  = (origTop  + pos.y - startY) + 'px';
+            e.preventDefault();
+        }
+
+        function onEnd() {
+            active = false;
+            el.style.cursor = 'grab';
+        }
+
+        el.addEventListener('mousedown',  onStart);
+        el.addEventListener('touchstart', onStart, { passive: false });
+        document.addEventListener('mousemove',  onMove);
+        document.addEventListener('touchmove',  onMove, { passive: false });
+        document.addEventListener('mouseup',    onEnd);
+        document.addEventListener('touchend',   onEnd);
+    }
+
         // Toggle folder
             const folder = document.querySelector('.folder');
             document.getElementById('folder-btn').addEventListener('click', () => {
@@ -80,26 +124,7 @@
             });
 
             // Drag logic
-            let isDragging = false, offsetX, offsetY;
-
-            folder.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                offsetX = e.clientX - folder.getBoundingClientRect().left;
-                offsetY = e.clientY - folder.getBoundingClientRect().top;
-                folder.style.cursor = 'grabbing';
-                folder.style.transform = 'none';
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                folder.style.left = (e.clientX - offsetX) + 'px';
-                folder.style.top  = (e.clientY - offsetY) + 'px';
-            });
-
-            document.addEventListener('mouseup', () => {
-                isDragging = false;
-                folder.style.cursor = 'grab';
-            });
+            makeDraggable(folder);
 
             // Toggle cake window
             const cake = document.querySelector('.cake-window');
@@ -117,26 +142,7 @@
             });
 
             // Drag logic
-            let isCakeDragging = false, cakeOffX, cakeOffY;
-
-            cake.addEventListener('mousedown', (e) => {
-                isCakeDragging = true;
-                cakeOffX = e.clientX - cake.getBoundingClientRect().left;
-                cakeOffY = e.clientY - cake.getBoundingClientRect().top;
-                cake.style.cursor = 'grabbing';
-                cake.style.transform = 'none';
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (!isCakeDragging) return;
-                cake.style.left = (e.clientX - cakeOffX) + 'px';
-                cake.style.top  = (e.clientY - cakeOffY) + 'px';
-            });
-
-            document.addEventListener('mouseup', () => {
-                isCakeDragging = false;
-                cake.style.cursor = 'grab';
-            });
+            makeDraggable(cake);
 
             const now = new Date().toLocaleString("en-US", { timeZone: "Asia/Dubai" });
             const dubai = new Date(now);
@@ -146,6 +152,12 @@
             document.getElementById('cal-day').textContent   = dubai.getDate();
 
             const homeAudio = document.getElementById('home-audio');
+
+            const bday     = new Date("2026-06-26T00:00:00+04:00");
+            const todayUAE = new Date(now);
+            todayUAE.setHours(0, 0, 0, 0);
+            const diffMs   = bday - todayUAE;
+            const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
 
             // Toggle + drag
             const calWindow = document.querySelector('.calendar');
@@ -160,37 +172,7 @@
                 }
             });
 
-            let isCalDragging = false, calOffX, calOffY;
-
-            calWindow.addEventListener('mousedown', (e) => {
-                isCalDragging = true;
-                calOffX = e.clientX - calWindow.getBoundingClientRect().left;
-                calOffY = e.clientY - calWindow.getBoundingClientRect().top;
-                calWindow.style.cursor = 'grabbing';
-                calWindow.style.transform = 'none';
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (!isCalDragging) return;
-                calWindow.style.left = (e.clientX - calOffX) + 'px';
-                calWindow.style.top  = (e.clientY - calOffY) + 'px';
-            });
-
-            document.addEventListener('mouseup', () => {
-                isCalDragging = false;
-                calWindow.style.cursor = 'grab';
-            });
-
-            // Countdown logic
-            const target = new Date('2026-06-26T00:00:00');  // D-Day
-
-            const nowStr = new Date().toLocaleString("en-US", { timeZone: "Asia/Dubai" });
-            const today  = new Date(nowStr);
-            console.log(today);
-            today.setHours(0, 0, 0, 0);
-
-            const diffMs   = target - today;
-            const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+            makeDraggable(calWindow);
 
             const dDateEl   = document.querySelector('.d-date');
             const messageEl = document.querySelector('.calendar .message');
@@ -336,23 +318,7 @@
                 musicWindow.classList.toggle('active');
             });
 
-            let isMusicDragging = false, musicOffX, musicOffY;
-            musicWindow.addEventListener('mousedown', (e) => {
-                isMusicDragging = true;
-                musicOffX = e.clientX - musicWindow.getBoundingClientRect().left;
-                musicOffY = e.clientY - musicWindow.getBoundingClientRect().top;
-                musicWindow.style.cursor = 'grabbing';
-                musicWindow.style.transform = 'none';
-            });
-            document.addEventListener('mousemove', (e) => {
-                if (!isMusicDragging) return;
-                musicWindow.style.left = (e.clientX - musicOffX) + 'px';
-                musicWindow.style.top  = (e.clientY - musicOffY) + 'px';
-            });
-            document.addEventListener('mouseup', () => {
-                isMusicDragging = false;
-                musicWindow.style.cursor = 'grab';
-            });
+            makeDraggable(musicWindow);
     </script>
 </body>
 </html>
