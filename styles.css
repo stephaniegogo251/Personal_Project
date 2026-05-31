@@ -477,7 +477,7 @@
     .menu-bar {
         position: relative;
         top: -50px;
-        gap: 5px;
+        gap: 0px;
         padding: 12px 24px;
         height: 64px;
         margin-top: auto;
@@ -487,11 +487,18 @@
     #folder-btn {
         width: 30px;
         height: 15px;
+        margin-right: 0px;
+        padding-right: 2px;
     }
 
     #cake-btn, .cal-btn-wrap img {
         width: 30px;
         height: 30px;
+    }
+
+    .cal-btn-wrap img {
+        margin-left: 0px;
+        padding-left: 2px;
     }
 
     #music-btn {
