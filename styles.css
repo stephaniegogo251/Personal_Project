@@ -478,31 +478,32 @@
         position: relative;
         top: -50px;
         gap: 0px;
-        padding: 12px 24px;
-        height: 64px;
+        padding: 8px 15px;
+        height: 54px;
         margin-top: auto;
-        width: 280px;
+        width: 300px;
     }
 
     #folder-btn {
-        width: 30px;
+        width: 20px;
         height: 15px;
         margin-right: 0px;
-        padding-right: 0px;
+        padding-right: 2px;
     }
 
     #cake-btn, .cal-btn-wrap img {
-        width: 30px;
-        height: 30px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .cal-btn-wrap img {
         margin-left: 0px;
-        padding-left: 0px;
+        padding-left: 2px;
     }
 
     #music-btn {
-        width: 35px;
-        height: 30px;
-        padding: 0px;
-        margin: 0px;
+        width: 25px;
+        height: 20px;
     }
  
     .music-window {
