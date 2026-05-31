@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>new page</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="main-app bg2" id="app">
+        <audio id="bday-audio" loop>
+            <source src="./audio/bday.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="home-audio" loop>
+            <source src="./audio/home.mp3" type="audio/mpeg">
+        </audio>
+        <div class="main-text-2 no-select">
+            <h1 class="greeting n2">Welcome Niki Chechi (●'◡'●)</h1>
+            <p class="bible-verse n2">it'll be okay, God is in Control</p>
+        </div>
+        <div class="folder">
+            <h1 class="no-select">Recipes</h1>
+            <div class="recipe-list no-select">
+                <a class="recipe" href="https://www.instagram.com/p/DYp15LnkkLY/?igsh=MXJ1cncwdnIydGd0Nw%3D%3D" target="_blank">Chicken Tortilla Wrap</a>
+                <a class="recipe" href="https://www.youtube.com/shorts/CHR2zGkhZq0" target="_blank">Quick Salad</a>
+                <a class="recipe" href="https://www.instagram.com/reels/DV9bGRygUj6/" target="_blank">Crispy Chicken Wrap</a>
+                <a class="recipe" href="https://www.instagram.com/reels/DWhb7roks9j/" target="_blank">Chicken Taco Recipe</a>
+                <a class="recipe" href="https://www.instagram.com/reels/DOd9IK9DhpS/" target="_blank">Fried Rice (Chicken)</a>
+                <a class="recipe" href="https://www.instagram.com/reels/DWjXe6ZEq_W/" target="_blank">Smashed Chicken Taco</a>
+            </div>
+        </div>
+        <div class="music-window" id="music-window">
+            <div class="music-left">
+                <div class="record-container">
+                    <img src="./img/record.png" class="record-img">
+                    <div class="sleeve-title">
+                        <p class="album-title" id="album-title">Song Name</p>
+                    </div>
+                </div>
+                <div class="music-controls">
+                    <button id="prev-btn">&#9664;&#9664;</button>
+                    <button id="play-pause-btn">&#9654;</button>
+                    <button id="next-btn">&#9654;&#9654;</button>
+                </div>
+            </div>
+            <div class="music-right">
+                <ul class="song-list" id="song-list"></ul>
+            </div>
+        </div>
+        <div class="cake-window" id="cake-window">
+            <h3 id="cake-title">Happy Birthday!</h3>
+            <div class="cake-scene">
+                <img src="./img/flames.png" class="flames">
+                <img src="./img/cakewoflames2.png" class="cake-img">
+            </div>
+        </div>
+        <div class="calendar">
+            <h3 class="d-date"></h3>
+            <p class="message"></p>
+        </div>
+        <div class="menu-bar">
+            <img src="./img/n2.png" id="folder-btn">
+            <img src="./img/music.png" id="music-btn">
+            <img src="./img/cake.png" id="cake-btn">
+            <div class="cal-btn-wrap" id="cal-btn">
+                <img src="./img/nc2.png">
+                <div class="cal-date">
+                    <span id="cal-month"  style="color: #FF5B78;"></span>
+                    <span id="cal-day"  style="color: #FF5B78;"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        // Toggle folder
+            const folder = document.querySelector('.folder');
+            document.getElementById('folder-btn').addEventListener('click', () => {
+                folder.classList.toggle('active');
+            });
+
+            // Drag logic
+            let isDragging = false, offsetX, offsetY;
+
+            folder.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                offsetX = e.clientX - folder.getBoundingClientRect().left;
+                offsetY = e.clientY - folder.getBoundingClientRect().top;
+                folder.style.cursor = 'grabbing';
+                folder.style.transform = 'none';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                folder.style.left = (e.clientX - offsetX) + 'px';
+                folder.style.top  = (e.clientY - offsetY) + 'px';
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                folder.style.cursor = 'grab';
+            });
+
+            // Toggle cake window
+            const cake = document.querySelector('.cake-window');
+            document.getElementById('cake-btn').addEventListener('click', () => {
+                const bdayAudio = document.getElementById('bday-audio');
+                cake.classList.toggle('active');
+
+                if (cake.classList.contains('active')) {
+                    bdayAudio.play();
+                } else {
+                    bdayAudio.pause();
+                    bdayAudio.currentTime = 0; // resets to start when closed
+                }
+
+            });
+
+            // Drag logic
+            let isCakeDragging = false, cakeOffX, cakeOffY;
+
+            cake.addEventListener('mousedown', (e) => {
+                isCakeDragging = true;
+                cakeOffX = e.clientX - cake.getBoundingClientRect().left;
+                cakeOffY = e.clientY - cake.getBoundingClientRect().top;
+                cake.style.cursor = 'grabbing';
+                cake.style.transform = 'none';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isCakeDragging) return;
+                cake.style.left = (e.clientX - cakeOffX) + 'px';
+                cake.style.top  = (e.clientY - cakeOffY) + 'px';
+            });
+
+            document.addEventListener('mouseup', () => {
+                isCakeDragging = false;
+                cake.style.cursor = 'grab';
+            });
+
+            const now = new Date().toLocaleString("en-US", { timeZone: "Asia/Dubai" });
+            const dubai = new Date(now);
+
+            const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            document.getElementById('cal-month').textContent = months[dubai.getMonth()];
+            document.getElementById('cal-day').textContent   = dubai.getDate();
+
+            const homeAudio = document.getElementById('home-audio');
+
+            // Toggle + drag
+            const calWindow = document.querySelector('.calendar');
+            document.getElementById('cal-btn').addEventListener('click', () => {
+                calWindow.classList.toggle('active');
+
+                if (diffDays === 0 && calWindow.classList.contains('active')) {
+                    homeAudio.play();
+                } else {
+                    homeAudio.pause();
+                    homeAudio.currentTime = 0;
+                }
+            });
+
+            let isCalDragging = false, calOffX, calOffY;
+
+            calWindow.addEventListener('mousedown', (e) => {
+                isCalDragging = true;
+                calOffX = e.clientX - calWindow.getBoundingClientRect().left;
+                calOffY = e.clientY - calWindow.getBoundingClientRect().top;
+                calWindow.style.cursor = 'grabbing';
+                calWindow.style.transform = 'none';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isCalDragging) return;
+                calWindow.style.left = (e.clientX - calOffX) + 'px';
+                calWindow.style.top  = (e.clientY - calOffY) + 'px';
+            });
+
+            document.addEventListener('mouseup', () => {
+                isCalDragging = false;
+                calWindow.style.cursor = 'grab';
+            });
+
+            // Countdown logic
+            const target = new Date('2026-06-26T00:00:00');  // D-Day
+
+            const nowStr = new Date().toLocaleString("en-US", { timeZone: "Asia/Dubai" });
+            const today  = new Date(nowStr);
+            console.log(today);
+            today.setHours(0, 0, 0, 0);
+
+            const diffMs   = target - today;
+            const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+            const dDateEl   = document.querySelector('.d-date');
+            const messageEl = document.querySelector('.calendar .message');
+
+            const d_msgs = [
+                "1",  // [0] D-26 May 31
+                '2',  // [1] D-25 Jun 1
+                '3',  // [2] D-24 Jun 2
+                '4',  // [3] D-23 Jun 3
+                '5',  // [4] D-22 Jun 4
+                '6',  // [5] D-21 Jun 5
+                '7',  // [6] D-20 Jun 6
+                '8',  // [7] D-19 Jun 7
+                '9',  // [8] D-18 Jun 8
+                '10', // [9] D-17 Jun 9
+                '11', // [10] D-16 Jun 10
+                '12', // [11] D-15 Jun 11
+                '13', // [12] D-14 Jun 12
+                "your speed doesn't matter, forward is forward (´▽`ʃ♡ƪ)", // [13] D-13 Jun 13
+                "dw if today was heavy, this too shall pass <br>(〃￣︶￣)人(￣︶￣〃)", // [14] D-12 Jun 14
+                "it's ok to say no & ok to ask for help ლ(╹◡╹ლ)", // [15] D-11 Jun 15
+                'choose to feel optimistic, it feels better (❁´◡`❁)', // [16] D-10 Jun 16
+                "week 2's already here and y'all are killin' it dadada da da~ q(≧▽≦q)", // [17] D-9  Jun 17
+                "you still here? slayy ehehehe", // [18] D-8  Jun 18
+                "you're home #1 hehehehe", // [19] D-7  Jun 19
+                'one day at a time. <br> week 1 done slayy~ ( •̀ ω •́ )✧', // [20] D-6  Jun 20
+                "you can't choose what life throws at you, but you can choose how you respond (✿◕‿◕✿)", // [21] D-5  Jun 21
+                "third time's the charm so forget anything bad ( ‵▽′)ψ", // [22] D-4  Jun 22
+                "always imagine the best case scenario ლ(╹◡╹ლ)", // [23] D-3 Jun 23
+                "I can do all things through Christ. <br> have a blessed first day! <br> ヾ(￣▽￣) Bye~Bye~", // [24] D-2 Jun 24
+                'happy birthday niki chechi!! q(≧▽≦q) <br>p.s. remember the blue moon!', // [25] D-1 Jun 25
+            ]
+
+            if (diffDays > 0) {
+                dDateEl.textContent   = `D-${diffDays}`;
+                messageEl.innerHTML = d_msgs[diffDays-1];
+            } else if (diffDays === 0) {
+                dDateEl.textContent   = `D-Day (≧▽≦q)`;
+                messageEl.innerHTML = 'cOmE bAcK hOmE~ cAn yOu cOmE bAcK hOMe? <br> ~(>_<。)';
+            } else {
+                dDateEl.textContent   = `D+${Math.abs(diffDays)}`;
+                messageEl.textContent = 'no more messages post d-day (●ˇ∀ˇ●)';
+            }
+
+            //song list
+            const songs = [
+                { title: 'Back To Me', src: './songs/backtome.mp3' },
+                { title: 'California Dreamin', src: './songs/CaliforniaDreamin.mp3' },
+                { title: 'Daft Punk', src: './songs/daft punk.mp3' },
+                { title: 'DIM', src: './songs/DIM.mp3' },
+                { title: 'dream tonite', src: './songs/dreamtonite.mp3' },
+                { title: 'drop dead', src: './songs/dropdead.mp3' },
+                { title: 'ek tera pyar', src: './songs/ekterapyar.mp3' },
+                { title: 'en gaanam', src: './songs/engaanam.mp3' },
+                { title: 'Endrendrum Punnagai', src: './songs/EndrendrumPunnagai.mp3' },
+                { title: 'Everything Is Embarrassing',src: './songs/EverythingIsEmbarrassing.mp3' },
+                { title: 'fuzzybrain', src: './songs/fuzzybrain.mp3' },
+                { title: 'Hard to Believe', src: './songs/HardtoBelieve.mp3' },
+                { title: 'HOW DO YOU FEEL', src: './songs/HOWDOYOUFEEL.mp3' },
+                { title: 'I Saw Your Face', src: './songs/ISawYourFace.mp3' },
+                { title: "If You Know That I'm Lonely",src: "./songs/IfYouKnowThatI'mLonely.mp3" },
+                { title: "It's Only Right",    src: "./songs/It'sOnlyRight.mp3" },
+                { title: 'Lavish', src: './songs/Lavish.mp3' },
+                { title: 'Lazy Calm', src: './songs/LazyCalm.mp3' },
+                { title: 'Love Songs', src: './songs/LoveSongs.mp3' },
+                { title: 'Mannipaaya', src: './songs/Mannipaaya.mp3' },
+                { title: 'moon', src: './songs/moon.mp3' },
+                { title: 'punk rocky', src: './songs/punkrocky.mp3' },
+                { title: 'Remember When',src: './songs/RememberWhen.mp3' },
+                { title: 'rollercoaster',src: './songs/rollercoaster.mp3' },
+                { title: 'Samba della Rosa', src: './songs/SambadellaRosa.mp3' },
+                { title: 'Sangathil Padatha',src: './songs/SangathilPadatha.mp3' },
+                { title: 'sparks', src: './songs/sparks.mp3' },
+                { title: 'Strong', src: './songs/Strong.mp3' },
+                { title: 'TNT', src: './songs/TNT.mp3' },
+                { title: 'Truth Of Pursuit', src: './songs/TruthOfPursuit.mp3' },
+                { title: 'Wassup', src: './songs/Wassup.mp3' },
+                { title: 'when you love someone', src: './songs/whenyoulovesomeone.mp3' },
+                { title: 'White Winter Hymnal', src: './songs/WhiteWinterHymnal.mp3' },
+            ];
+
+            let currentIndex = 0;
+            let isPlaying = false;
+            const musicAudio = new Audio();
+
+            const albumTitle   = document.getElementById('album-title');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const songListEl   = document.getElementById('song-list');
+
+            function loadSong(index) {
+                currentIndex = index;
+                const song = songs[index];
+                musicAudio.src = song.src;
+                albumTitle.textContent = song.title;
+                document.querySelectorAll('.song-list li').forEach((li, i) => {
+                    li.classList.toggle('active-song', i === index);
+                });
+                if (isPlaying) musicAudio.play();
+            }
+
+            function togglePlay() {
+                if (isPlaying) {
+                    musicAudio.pause();
+                    playPauseBtn.innerHTML = '&#9654;';
+                } else {
+                    musicAudio.play();
+                    playPauseBtn.innerHTML = '&#10074;&#10074;';
+                }
+                isPlaying = !isPlaying;
+            }
+
+            document.getElementById('play-pause-btn').addEventListener('click', togglePlay);
+
+            document.getElementById('next-btn').addEventListener('click', () => {
+                loadSong((currentIndex + 1) % songs.length);
+            });
+
+            document.getElementById('prev-btn').addEventListener('click', () => {
+                loadSong((currentIndex - 1 + songs.length) % songs.length);
+            });
+
+            musicAudio.addEventListener('ended', () => {
+                loadSong((currentIndex + 1) % songs.length);
+            });
+
+            // Build song list
+            songs.forEach((song, i) => {
+                const li = document.createElement('li');
+                li.textContent = song.title;
+                li.addEventListener('click', () => {
+                    isPlaying = true;
+                    loadSong(i);
+                    playPauseBtn.innerHTML = '&#10074;&#10074;';
+                });
+                songListEl.appendChild(li);
+            });
+
+            loadSong(0); //def song 1
+
+            // music window script + draggable
+            const musicWindow = document.getElementById('music-window');
+            document.getElementById('music-btn').addEventListener('click', () => {
+                musicWindow.classList.toggle('active');
+            });
+
+            let isMusicDragging = false, musicOffX, musicOffY;
+            musicWindow.addEventListener('mousedown', (e) => {
+                isMusicDragging = true;
+                musicOffX = e.clientX - musicWindow.getBoundingClientRect().left;
+                musicOffY = e.clientY - musicWindow.getBoundingClientRect().top;
+                musicWindow.style.cursor = 'grabbing';
+                musicWindow.style.transform = 'none';
+            });
+            document.addEventListener('mousemove', (e) => {
+                if (!isMusicDragging) return;
+                musicWindow.style.left = (e.clientX - musicOffX) + 'px';
+                musicWindow.style.top  = (e.clientY - musicOffY) + 'px';
+            });
+            document.addEventListener('mouseup', () => {
+                isMusicDragging = false;
+                musicWindow.style.cursor = 'grab';
+            });
+    </script>
+</body>
+</html>
