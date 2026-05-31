@@ -477,7 +477,7 @@
     .menu-bar {
         position: relative;
         top: -50px;
-        gap: 0px;
+        gap: 5px;
         padding: 12px 24px;
         height: 64px;
         margin-top: auto;
@@ -527,14 +527,10 @@
     }
  
     .calendar .message {
-        font-size: 15px;
+        font-size: 12px;
     }
  
     .d-date {
         font-size: 26px;
-    }
-
-    .calendar {
-        width: 68dvh;
     }
 }
